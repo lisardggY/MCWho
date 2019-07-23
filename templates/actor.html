@@ -1,0 +1,17 @@
+<h3>{{ actor["name"] }} is in the MCU!</h3>
+<table>
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td>Role</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in actor["roles"] %}
+        <tr>
+          <td>{{ item["title"]}}</td>
+          <td>{{ item["role"]}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": ".venv\\Scripts\\python.exe",
+    "files.associations": {"**/templates/*.html": "jinja-html"},
+    "appService.zipIgnorePattern": [
+        ".vscode{,/**}",
+        ".venv{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/6b141325-dba9-46bd-a921-014e7df61cf9/resourceGroups/mcwho/providers/Microsoft.Web/sites/mcwho",
+    "appService.deploySubpath": "",
+}
