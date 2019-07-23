@@ -18,6 +18,8 @@ def search():
             output = output_stream.read()
             if output: yield output.replace('\n', '<br/>')
             yield render_template("actor.html", actor=result)
+        output = output_stream.read()
+        if output: yield output.replace('\n', '<br/>')
     return Response(stream_with_context(generate()))
 
 @app.route('/')

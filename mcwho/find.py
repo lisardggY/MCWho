@@ -38,7 +38,7 @@ def check_mcwho(search_string, output = stdout):
             yield mcu_actor
     else:
         search_string = urllib.parse.quote(search_string)
-        top_actor_matches = islice(__retrieve_actor_details(search_string), 15)        
+        top_actor_matches = islice(__retrieve_actor_details(search_string), 25)        
         for actor in top_actor_matches:         
             output.write(f"\nSearching for {actor['name']} in the MCU...")
             mcu_actor = get_actor(actor["id"])
