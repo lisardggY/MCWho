@@ -22,7 +22,7 @@ def search():
 
 @app.route('/')
 def home():
-    return "Coming soon.."
+    return render_template("index.html")
 
 class ReadWriteStream:
     def __init__(self, s=""):
