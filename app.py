@@ -13,6 +13,7 @@ def api_search():
 def search():
     search_string = request.args.get("q")
     def generate():
+        yield "<p><a href='/'>Back to Search</a></p>"
         output_stream = ReadWriteStream()        
         for result in check_mcwho(search_string, output_stream):
             output = output_stream.read()
@@ -20,11 +21,20 @@ def search():
             yield render_template("actor.html", actor=result)
         output = output_stream.read()
         if output: yield output.replace('\n', '<br/>')
+        yield "<p><a href='/'>Back to Search</a></p>"
     return Response(stream_with_context(generate()))
 
 @app.route('/')
 def home():
     return render_template("index.html")
+
+@app.route('/dump')
+def dump():
+    def generate():
+        from sys import modules
+        for actor in modules["mcwho.find"].mcu_actors.values():
+            yield render_template("actor.html", actor=actor)
+    return Response(stream_with_context(generate()))
 
 class ReadWriteStream:
     def __init__(self, s=""):
