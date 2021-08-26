@@ -32,7 +32,7 @@ def load_mcu_actors(output = sys.output):
         soup = BeautifulSoup(requests.get(mcu_endpoint).content, 'html.parser')
         current_page_data = soup.find_all("img", class_="loadlate")
         if current_page_data:
-            print(f"Found {len(current_page_data)} films/shows in page {current_page}")
+            output.write(f"Found {len(current_page_data)} films/shows in page {current_page}")
             films_or_shows.extend(current_page_data)
             current_page += 1
         else:
@@ -52,7 +52,7 @@ def load_mcu_actors(output = sys.output):
                 mcu_actors[actorId] = {"id":actorId, "name":actorName, "roles":[]}
             mcu_actors[actorId]["roles"].append ({"id":id, "title": title, "role": actor["role"]})
             if iteration % 50 == 0:
-                print (f"Scanned {len(mcu_actors)} actors in {films_or_shows.index(film_or_show) + 1} films")
+                output.write(f"Scanned {len(mcu_actors)} actors in {films_or_shows.index(film_or_show) + 1} films")
                 
     with open("mcu.json", 'w', encoding="utf-8") as outfile:
         json.dump(mcu_actors, outfile, indent=True)

@@ -1,5 +1,6 @@
 from io import StringIO
 from mcwho.find import check_mcwho
+from mcwho.load import load_mcu_actors
 from flask import Flask, jsonify, Response, stream_with_context, render_template, request
 import json
 app = Flask(__name__)
@@ -34,6 +35,15 @@ def dump():
         from sys import modules
         for actor in modules["mcwho.find"].mcu_actors.values():
             yield render_template("actor.html", actor=actor)
+    return Response(stream_with_context(generate()))
+
+@app.route('/reload')
+def reload():
+    def generate():
+        yield "<p>Importing the Multiverse...</p>"
+        output_stream = ReadWriteStream()        
+        load_mcu_actors(output_stream)
+        yield ourput_stream.read()
     return Response(stream_with_context(generate()))
 
 class ReadWriteStream:
