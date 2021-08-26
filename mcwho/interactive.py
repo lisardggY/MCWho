@@ -1,6 +1,10 @@
 import sys
+import datetime
+import pathlib
+import click
 from mcwho.find import get_actor
 from mcwho.find import check_mcwho
+from mcwho.load import load_mcu_actors
 
 def __interactive_print_actor(actor_id, actor_name, output = sys.stdout):
     actor = get_actor(actor_id)
@@ -15,6 +19,19 @@ def __interactive_print_actor(actor_id, actor_name, output = sys.stdout):
                 for role in actor["roles"][1:]:
                     print(f"{role['role']} in {role['title']}\n")
         return True
+
+def interactive_reload():
+    output = sys.stdout
+    data_file = pathlib.Path("mcu.json")
+    if not data_file.exists():
+        output.write("no data found. Fetching from IMDB.")
+    else:
+        update_time = datetime.datetime.fromtimestamp(data_file.stat().st_mtime)
+        output.write(f"data file last updated on {update_time}.\n")
+        output.write("Reload? [Y/n]\n")
+        cmd = click.getchar()
+        if cmd == "y" or cmd == "Y" or cmd == "":
+            load_mcu_actors()
 
 def interactive_search():
     while True:
@@ -32,3 +49,15 @@ def interactive_search():
                     break        
 
 
+def interactive():
+    while True:
+        try:
+            print("[S]earch or [R]eload?")
+            cmd = click.getchar()
+        except EOFError:
+            break
+
+        if cmd == "s" or cmd == "S":
+            interactive_search()
+        if cmd == "r" or cmd == "R":
+            interactive_reload()

@@ -1,3 +1,3 @@
 import mcwho.interactive
 
-mcwho.interactive.interactive_search()
+mcwho.interactive.interactive()

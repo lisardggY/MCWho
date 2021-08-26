@@ -1,4 +1,4 @@
-from sys import output
+import sys
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -23,13 +23,15 @@ def get_actors(movieId):
             actor = {"id":actor_id.group(1), "name":actor_name, "role":actor_role}            
             yield actor
 
-def load_mcu_actors(output = sys.output):
+def load_mcu_actors(output = sys.stdout):
+    output.write("Reload MCU actor list from IMDB...\n")
     has_more_pages = True
     current_page = 1
     films_or_shows = []
     while has_more_pages:
         mcu_endpoint = f"https://www.imdb.com/search/keyword/?keywords=marvel-cinematic-universe&mode=simple&page={current_page}"    
-        soup = BeautifulSoup(requests.get(mcu_endpoint).content, 'html.parser')
+        contents = requests.get(mcu_endpoint).content        
+        soup = BeautifulSoup(contents, 'html.parser')
         current_page_data = soup.find_all("img", class_="loadlate")
         if current_page_data:
             output.write(f"Found {len(current_page_data)} films/shows in page {current_page}")
@@ -52,10 +54,10 @@ def load_mcu_actors(output = sys.output):
                 mcu_actors[actorId] = {"id":actorId, "name":actorName, "roles":[]}
             mcu_actors[actorId]["roles"].append ({"id":id, "title": title, "role": actor["role"]})
             if iteration % 50 == 0:
-                output.write(f"Scanned {len(mcu_actors)} actors in {films_or_shows.index(film_or_show) + 1} films")
+                output.write(f"Scanned {len(mcu_actors)} actors in {films_or_shows.index(film_or_show) + 1} films\n")
                 
     with open("mcu.json", 'w', encoding="utf-8") as outfile:
-        json.dump(mcu_actors, outfile, indent=True)
+        json.dump(mcu_actors, outfile, indent=False)
         
         
 
