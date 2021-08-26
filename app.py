@@ -42,7 +42,7 @@ def reload():
     def generate():
         yield "<p>Importing the Multiverse...</p>"
         output_stream = ReadWriteStream()        
-        load_mcu_actors(output_stream)
+        #load_mcu_actors(output_stream)
         yield ourput_stream.read()
     return Response(stream_with_context(generate()))
 
